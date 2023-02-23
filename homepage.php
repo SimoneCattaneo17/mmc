@@ -23,7 +23,20 @@
                         $_SESSION['username'] = $name;
                         $_SESSION['password'] = $password;
                         echo '<header>';
-                            //add something
+                            echo '<nav class="navbar navbar-expand-lg navbar-light bg-white">';
+                                echo '<div class="container-fluid">';
+                                    echo '<div class="collapse navbar-collapse" id="navbarNav">';
+                                        echo '<ul class="navbar-nav">';
+                                            echo '<li class="nav-item">';
+                                                echo '<a class="nav-link active" aria-current="page" href="#">Home</a>';
+                                            echo '</li>';
+                                            echo '<li class="nav-item">';
+                                                echo '<a class="nav-link" href="logout.php">Logout</a>';
+                                            echo '</li>';
+                                        echo '</ul>';
+                                    echo '</div>';
+                                echo '</div>';
+                            echo '</nav>';
                         echo '</header>';
                     }
                     else {
