@@ -25,7 +25,7 @@
                 <div class="card-body p-5">
                     <div class="text-center">
                         <h3 class="mb-5">Creazione DVR Aziendale</h3>
-                    </div
+                    </div>
 
                     <form method="GET" action="homepage.php">
                         <div class="form-outline mb-4">
