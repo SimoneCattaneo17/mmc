@@ -42,7 +42,7 @@
             }
         }
         if(isset($_POST['username']) || isset($_SESSION['id'])){
-            if(!isset($_POST['id'])) {
+            if(isset($_POST['username'])) {
                 $_SESSION['username'] = $_POST['username'];
                 $_SESSION['password'] = $_POST['password'];
             }
