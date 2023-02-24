@@ -7,47 +7,35 @@
         <title>Homepage</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
         <link href="./CSS/style.css">
+        <link href="./CSS/font-awesome.css">
         <script src="./JavaScript/script.js"></script>
     </head>
     <body>
         <?php
-        require __DIR__ . '/functions.php';
-        if(isset($_GET['peso'])) {
-            $id_utente = $_SESSION['id'];
-            $ragione = $_GET['ragioneSociale'];
-            $peso = $_GET['peso'];
-            $altezzaIniziale = $_GET['altezzaIniziale'];
-            $distanzaVerticale = $_GET['distanzaVerticale'];
-            $distanzaOrizzontale = $_GET['distanzaOrizzontale'];
-            $dislocazione = $_GET['dislocazioneAngolare'];
-            if($_GET['presa'] == "Buona") {
-                $presa = true;
-            }
-            else {
-                $presa = false;
-            }
-            $frequenza = $_GET['frequenza'];
-            $durata = $_GET['durata'];
-            $sql = "INSERT INTO dvr (id_utente, ragione, peso, altezzaIniziale, distanzaVerticale, distanzaOrizzontale, dislocazione, presa, frequenza, durata) VALUES ('$id_utente', '$ragione', '$peso', '$altezzaIniziale', '$distanzaVerticale', '$distanzaOrizzontale', '$dislocazione', '$presa', '$frequenza', '$durata')";
-            $result = connect($sql);
-            if($result) {
-                echo '<div class="alert alert-success" role="alert">
-                DVR creato con successo!
-                </div>';
-            }
-            else {
-                echo '<div class="alert alert-danger" role="alert">
-                Errore durante la creazione del DVR!
-                </div>';
-            }
+        class valutazione {
+            public $id;
+            public $id_utente;
+            public $ragione;
+            public $peso;
+            public $altezzaIniziale;
+            public $distanzaVerticale;
+            public $distanzaOrizzontale;
+            public $dislocazione;
+            public $presa;
+            public $frequenza;
+            public $durata;
         }
+
+        require __DIR__ . '/functions.php';
+        
+        //controllo se l'utente è loggato
         if(isset($_POST['username']) || isset($_SESSION['id'])){
             if(isset($_POST['username'])) {
                 $_SESSION['username'] = $_POST['username'];
                 $_SESSION['password'] = $_POST['password'];
             }
 
-            $sql = 'SELECT id, username, pswd FROM utente';
+            $sql = 'SELECT id, username, pswd, operatore FROM mmc_utente';
 
             $result = connect($sql);
 
@@ -58,16 +46,19 @@
                         $_SESSION['id'] = $row['id'];
                         $_SESSION['username'] = $row['username'];
                         $_SESSION['password'] = $row['pswd'];
+                        $_SESSION['operatore'] = $row['operatore'];
                         echo '<header>';
                             echo '<nav class="navbar navbar-expand-lg navbar-light bg-white">';
                                 echo '<div class="container-fluid">';
                                     echo '<div class="collapse navbar-collapse" id="navbarNav">';
                                         //left navbar items
-                                        echo '<ul class="navbar-nav me-auto">';
-                                            echo '<li class="nav-item">';
-                                                echo '<a class="nav-link active" aria-current="page" href="new.php">New DVR</a>';
-                                            echo '</li>';
-                                        echo '</ul>';
+                                        if($_SESSION['operatore']) {
+                                            echo '<ul class="navbar-nav me-auto">';
+                                                echo '<li class="nav-item">';
+                                                    echo '<a class="nav-link active" aria-current="page" href="new.php">Nuova Valutazione</a>';
+                                                echo '</li>';
+                                            echo '</ul>';
+                                        }
 
                                         //right navbar items
                                         echo '<ul class="navbar-nav ms-auto">';
@@ -115,6 +106,8 @@
             }
             $frequenza = $_GET['frequenza'];
             $durata = $_GET['durata'];
+            $unaMano = $_GET['unaMano'];
+            $duePersone = $_GET['duePersone'];
 
             switch(true) {
                 case $altezzaIniziale <= 25:
@@ -302,10 +295,30 @@
                     break;
             }
 
+            if($unaMano == "on"){
+                $fg = 0.6;
+                $unaMano = 1;
+            }
+            else {
+                $fg = 1;
+                $unaMano = 0;
+            }
+
+            if($duePersone == "on") {
+                $fh = 2;
+                $fi = 0.85;
+                $duePersone = 1;
+            }
+            else {
+                $fh = 1;
+                $fi = 1;
+                $duePersone = 0;
+            }
+
             $cp = 23;
 
-            $pesoLimite = $cp * $fa * $fb * $fc * $fd * $fe * $ff;
-            $sql = "INSERT INTO mmc_valutazione (id_utente, ragione, peso, altezzaIniziale, distanzaVerticale, distanzaOrizzontale, dislocazione, presa, frequenza, durata, pesoLimite) VALUES ('$id_utente', '$ragione', '$peso', '$altezzaIniziale', '$distanzaVerticale', '$distanzaOrizzontale', '$dislocazione', '$presa', '$frequenza', '$durata', '$pesoLimite')";
+            $pesoLimite = $cp * $fa * $fb * $fc * $fd * $fe * $ff * $fg / $fh * $fi;
+            $sql = "INSERT INTO mmc_valutazione (id_utente, ragione, peso, altezzaIniziale, distanzaVerticale, distanzaOrizzontale, dislocazione, presa, frequenza, durata, unaMano, duePersone, pesoLimite) VALUES ('$id_utente', '$ragione', '$peso', '$altezzaIniziale', '$distanzaVerticale', '$distanzaOrizzontale', '$dislocazione', '$presa', '$frequenza', '$durata', '$unaMano', '$duePersone', '$pesoLimite')";
             $result = connect($sql);
             if($result) {
                 echo '<div class="alert alert-success" role="alert">
@@ -353,6 +366,7 @@
                                 echo '<thead>';
                                     echo '<tr>';
                                         echo '<th scope="col">Ragione Sociale</th>';
+                                        echo '<th scope="col">Indice di Sollevamento</th>';
                                         echo '<th scope="col">Peso</th>';
                                         echo '<th scope="col">Altezza Iniziale</th>';
                                         echo '<th scope="col">Distanza Vert.</th>';
@@ -371,6 +385,7 @@
                                     while ($row = $result->fetch_assoc()) {
                                         echo '<tr>';
                                             echo '<td>' . $row['ragione'] . '</td>';
+                                            echo '<td>' . $row['peso'] / $row['pesoLimite'] . '</td>';
                                             echo '<td>' . $row['peso'] . '</td>';
                                             echo '<td>' . $row['altezzaIniziale'] . '</td>';
                                             echo '<td>' . $row['distanzaVerticale'] . '</td>';

@@ -13,18 +13,36 @@
 
 <body>
     <?php
-    require __DIR__ . '/functions.php';
-
     if (isset($_SESSION['username']) && isset($_SESSION['password']) && isset($_SESSION['id'])) {
-        $name = $_SESSION['username'];
-        $password = $_SESSION['password'];
+        echo '<header>';
+            echo '<nav class="navbar navbar-expand-lg navbar-light bg-white">';
+                echo '<div class="container-fluid">';
+                    echo '<div class="collapse navbar-collapse" id="navbarNav">';
+                        //left navbar items
+                        echo '<ul class="navbar-nav me-auto">';
+                            echo '<li class="nav-item">';
+                                echo '<a class="nav-link active" aria-current="page" href="homepage.php">Home</a>';
+                            echo '</li>';
+                        echo '</ul>';
+
+                        //right navbar items
+                        echo '<ul class="navbar-nav ms-auto">';
+                            echo '<li class="nav-item">';
+                                echo '<a class="nav-link" href="logout.php">Logout</a>';
+                            echo '<li>';
+                        echo '</ul>';
+                    echo '</div>';
+                echo '</div>';
+            echo '</nav>';
+        echo '</header>';
+
         echo '
     <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-12 col-md-8 col-lg-6 col-xl-5">
             <div class="card shadow-2-strong" style="border-radius: 1rem;">
                 <div class="card-body p-5">
                     <div class="text-center">
-                        <h3 class="mb-5">Creazione DVR Aziendale</h3>
+                        <h3 class="mb-5">Nuova Valutazione</h3>
                     </div>
 
                     <form method="GET" action="homepage.php">
@@ -41,16 +59,6 @@
                         <div class="form-outline mb-4">
                             <label class="form-label">Altezza iniziale in cm</label>
                             <input type="number" min="0" name="altezzaIniziale" id="altezzaIniziale" class="form-control form-control-lg" list="altIn" required />
-                            <datalist id="altIn">
-            	                <option id="25" value="<25">
-                                <option id="50" value=">=25 & <50">
-                                <option id="75" value=">=50 & <75">
-                                <option id="100" value=">=75 & <100">
-                                <option id="125" value=">=100 & <125">
-                                <option id="150" value=">=125 & <150">
-                                <option id="175" value=">=150 & <175">
-                                <option id="000" value=">=175">
-                            </datalist>
                         </div>
 
                         <div class="form-outline mb-4">
@@ -83,7 +91,17 @@
 
                         <div class="form-outline mb-4">
                             <label class="form-label" for="typePasswordX-2">Durata operazione in ore</label>
-                            <input type="number" min="0.20" max="8.00" step="0.20" name="durata" id="durarata" class="form-control form-control-lg" required />
+                            <input type="number" name="durata" id="durata" value="Sollevato con una mano?" class="form-control form-control-lg" required />
+                        </div>
+
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="typePasswordX-2">Sollevato con una mano?</label>
+                            <input type="checkbox" name="unaMano" id="durarata" required />
+                        </div>
+
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="typePasswordX-2">Sollevato con una mano?</label>
+                            <input type="checkbox" name="duePersone" id="persone" required />
                         </div>
 
                         <div class="text-center">
