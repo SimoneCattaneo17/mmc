@@ -42,7 +42,7 @@
             <div class="card shadow-2-strong" style="border-radius: 1rem;">
                 <div class="card-body p-5">
                     <div class="text-center">
-                        <h3 class="mb-5">Nuova Valutazione</h3>
+                        <h3 class="mb-5">Nuovo documento</h3>
                     </div>
 
                     <form method="GET" action="homepage.php">

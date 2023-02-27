@@ -12,6 +12,7 @@
     </head>
     <body>
         <?php
+        //non so se serve, dubito
         class valutazione {
             public $id;
             public $id_utente;
@@ -88,12 +89,11 @@
             echo "If you are not redirected, click <a href='index.php'>here</a>";
         }
 
-        //inserimento nuovo DVR nella tabella
+        //inserimento nuovo documento nella tabella
         if(isset($_GET['peso'])) {
             $id_utente = $_SESSION['id'];
             $ragione = $_GET['ragioneSociale'];
             $peso = $_GET['peso'];
-
             $altezzaIniziale = $_GET['altezzaIniziale'];
             $distanzaVerticale = $_GET['distanzaVerticale'];
             $distanzaOrizzontale = $_GET['distanzaOrizzontale'];
@@ -318,6 +318,7 @@
             $cp = 23;
 
             $pesoLimite = $cp * $fa * $fb * $fc * $fd * $fe * $ff * $fg / $fh * $fi;
+            
             $sql = "INSERT INTO mmc_valutazione (id_utente, ragione, peso, altezzaIniziale, distanzaVerticale, distanzaOrizzontale, dislocazione, presa, frequenza, durata, unaMano, duePersone, pesoLimite) VALUES ('$id_utente', '$ragione', '$peso', '$altezzaIniziale', '$distanzaVerticale', '$distanzaOrizzontale', '$dislocazione', '$presa', '$frequenza', '$durata', '$unaMano', '$duePersone', '$pesoLimite')";
             $result = connect($sql);
             if($result) {
@@ -332,6 +333,7 @@
             }
         }
 
+        //eliminazione valutazione
         if(isset($_GET['id'])) {
             $id = $_GET['id'];
             $sql = "DELETE FROM mmc_valutazione WHERE id = '$id'";
@@ -377,6 +379,9 @@
                                         echo '<th scope="col">Durata</th>';
                                         echo '<th scope="col">Data Creazione</th>';
                                         if($_SESSION['operatore']) {
+                                            echo '<th scope="col">Modifica</th>';
+                                        }
+                                        if($_SESSION['operatore']) {
                                             echo '<th scope="col">Elimina</th>';
                                         }
                                     echo '</tr>';
@@ -395,6 +400,9 @@
                                             echo '<td>' . $row['frequenza'] . '</td>';
                                             echo '<td>' . $row['durata'] . '</td>';
                                             echo '<td>' . $row['dataCreazione'] . '</td>';
+                                            if($_SESSION['operatore']) {
+                                                echo '<td><a href="new.php?id=' . $row['id'] . '&operazione=Modifica"><i class="fa-solid fa-edit">modifica</i></a></td>';
+                                            }
                                             if($_SESSION['operatore']) {
                                                 echo '<td><a href="homepage.php?id=' . $row['id'] . '"><i class="fa-solid fa-trash-can">elimina</i></a></td>';
                                             }
