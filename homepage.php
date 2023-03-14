@@ -90,24 +90,26 @@
         }
 
         //inserimento nuovo documento nella tabella
-        if(isset($_GET['peso'])) {
+        if(isset($_POST['peso'])) {
             $id_utente = $_SESSION['id'];
-            $ragione = $_GET['ragioneSociale'];
-            $peso = $_GET['peso'];
-            $altezzaIniziale = $_GET['altezzaIniziale'];
-            $distanzaVerticale = $_GET['distanzaVerticale'];
-            $distanzaOrizzontale = $_GET['distanzaOrizzontale'];
-            $dislocazione = $_GET['dislocazioneAngolare'];
-            if($_GET['presa'] == "Buona") {
+            if(isset($_POST['ragioneSociale'])){
+                $ragione = $_POST['ragioneSociale'];
+            }
+            $peso = $_POST['peso'];
+            $altezzaIniziale = $_POST['altezzaIniziale'];
+            $distanzaVerticale = $_POST['distanzaVerticale'];
+            $distanzaOrizzontale = $_POST['distanzaOrizzontale'];
+            $dislocazione = $_POST['dislocazioneAngolare'];
+            if($_POST['presa'] == "Buona") {
                 $presa = true;
             }
             else {
                 $presa = false;
             }
-            $frequenza = $_GET['frequenza'];
-            $durata = $_GET['durata'];
-            $unaMano = $_GET['unaMano'];
-            $duePersone = $_GET['duePersone'];
+            $frequenza = $_POST['frequenza'];
+            $durata = $_POST['durata'];
+            $unaMano = $_POST['unaMano'];
+            $duePersone = $_POST['duePersone'];
 
             switch(true) {
                 case $altezzaIniziale <= 25:
@@ -319,7 +321,13 @@
 
             $pesoLimite = $cp * $fa * $fb * $fc * $fd * $fe * $ff * $fg / $fh * $fi;
             
-            $sql = "INSERT INTO mmc_valutazione (id_utente, ragione, peso, altezzaIniziale, distanzaVerticale, distanzaOrizzontale, dislocazione, presa, frequenza, durata, unaMano, duePersone, pesoLimite) VALUES ('$id_utente', '$ragione', '$peso', '$altezzaIniziale', '$distanzaVerticale', '$distanzaOrizzontale', '$dislocazione', '$presa', '$frequenza', '$durata', '$unaMano', '$duePersone', '$pesoLimite')";
+            if(isset($_GET['modifica']) && $_GET['modifica'] == 'true'){
+                $idRow = $_GET['idModifica'];
+                $sql = "UPDATE mmc_valutazione SET peso = '$peso', altezzaIniziale = '$altezzaIniziale', distanzaVerticale = '$distanzaVerticale', distanzaOrizzontale = '$distanzaOrizzontale', dislocazione = '$dislocazione', presa = '$presa', frequenza = '$frequenza', durata = '$durata', unaMano = '$unaMano', duePersone = '$duePersone', pesoLimite = '$pesoLimite' WHERE id = '$idRow'";
+            }
+            else {
+                $sql = "INSERT INTO mmc_valutazione (id_utente, ragione, peso, altezzaIniziale, distanzaVerticale, distanzaOrizzontale, dislocazione, presa, frequenza, durata, unaMano, duePersone, pesoLimite) VALUES ('$id_utente', '$ragione', '$peso', '$altezzaIniziale', '$distanzaVerticale', '$distanzaOrizzontale', '$dislocazione', '$presa', '$frequenza', '$durata', '$unaMano', '$duePersone', '$pesoLimite')";
+            }
             $result = connect($sql);
             if($result) {
                 echo '<div class="alert alert-success" role="alert">
@@ -401,7 +409,7 @@
                                             echo '<td>' . $row['durata'] . '</td>';
                                             echo '<td>' . $row['dataCreazione'] . '</td>';
                                             if($_SESSION['operatore']) {
-                                                echo '<td><a href="new.php?id=' . $row['id'] . '&operazione=Modifica"><i class="fa-solid fa-edit">modifica</i></a></td>';
+                                                echo '<td><a href="edit.php?id=' . $row['id'] . '&ragione=' . $row['ragione'] . '"><i class="fa-solid fa-edit">modifica</i></a></td>';
                                             }
                                             if($_SESSION['operatore']) {
                                                 echo '<td><a href="homepage.php?id=' . $row['id'] . '"><i class="fa-solid fa-trash-can">elimina</i></a></td>';

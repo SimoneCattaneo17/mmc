@@ -1,5 +1,5 @@
 <?php
-    session_start();
+session_start();
 ?>
 <!DOCTYPE html>
 <html>
@@ -13,43 +13,19 @@
 
 <body>
     <?php
-    if (isset($_SESSION['username']) && isset($_SESSION['password']) && isset($_SESSION['id'])) {
-        echo '<header>';
-            echo '<nav class="navbar navbar-expand-lg navbar-light bg-white">';
-                echo '<div class="container-fluid">';
-                    echo '<div class="collapse navbar-collapse" id="navbarNav">';
-                        //left navbar items
-                        echo '<ul class="navbar-nav me-auto">';
-                            echo '<li class="nav-item">';
-                                echo '<a class="nav-link active" aria-current="page" href="homepage.php">Home</a>';
-                            echo '</li>';
-                        echo '</ul>';
-
-                        //right navbar items
-                        echo '<ul class="navbar-nav ms-auto">';
-                            echo '<li class="nav-item">';
-                                echo '<a class="nav-link" href="logout.php">Logout</a>';
-                            echo '<li>';
-                        echo '</ul>';
-                    echo '</div>';
-                echo '</div>';
-            echo '</nav>';
-        echo '</header>';
-
+    if (isset($_GET['id']) && isset($_GET['ragione'])) {
+        $id = $_GET['id'];
+        $ragione = $_GET['ragione'];
         echo '
     <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-12 col-md-8 col-lg-6 col-xl-5">
             <div class="card shadow-2-strong" style="border-radius: 1rem;">
                 <div class="card-body p-5">
                     <div class="text-center">
-                        <h3 class="mb-5">Nuovo documento</h3>
+                        <h3 class="mb-5">Modifica documento</h3>
                     </div>
 
-                    <form method="POST" action="homepage.php">
-                        <div class="form-outline mb-4">
-                            <label class="form-label" for="typeEmailX-2">Ragione sociale</label>
-                            <input type="text" name="ragioneSociale" id="ragioneSociale" class="form-control form-control-lg" required />
-                        </div>
+                    <form method="POST" action="homepage.php?modifica=true&ragione=' . $ragione . '&idModifica=' . $id . '">
 
                         <div class="form-outline mb-4">
                             <label class="form-label">Peso in Kg</label>
@@ -96,16 +72,16 @@
 
                         <div class="form-outline mb-4">
                             <label class="form-label" for="typePasswordX-2">Sollevato con una mano?</label>
-                            <input type="checkbox" name="unaMano" id="durarata" required />
+                            <input type="checkbox" name="unaMano" id="durarata" />
                         </div>
 
                         <div class="form-outline mb-4">
                             <label class="form-label" for="typePasswordX-2">Sollevato con una mano?</label>
-                            <input type="checkbox" name="duePersone" id="persone" required />
+                            <input type="checkbox" name="duePersone" id="persone" />
                         </div>
 
                         <div class="text-center">
-                            <button class="btn btn-primary btn-lg btn-block" type="submit">Crea</button>
+                            <button class="btn btn-primary btn-lg btn-block" type="submit">Modifica</button>
                         </div>
                     </form>
                 </div>
@@ -113,8 +89,7 @@
         </div>
     </div>
         ';
-    }
-    else {
+    } else {
         header("refresh:5;url=index.php");
         echo "You are not logged in<br>";
         echo "Redirecting...<br>";
@@ -122,3 +97,5 @@
     }
     ?>
 </body>
+
+</html>
