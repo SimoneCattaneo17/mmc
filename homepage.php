@@ -12,20 +12,6 @@
     </head>
     <body>
         <?php
-        //non so se serve, dubito
-        class valutazione {
-            public $id;
-            public $id_utente;
-            public $ragione;
-            public $peso;
-            public $altezzaIniziale;
-            public $distanzaVerticale;
-            public $distanzaOrizzontale;
-            public $dislocazione;
-            public $presa;
-            public $frequenza;
-            public $durata;
-        }
 
         require __DIR__ . '/functions.php';
         
@@ -94,7 +80,7 @@
             echo "If you are not redirected, click <a href='index.php'>here</a>";
         }
 
-        //inserimento nuovo documento nella tabella
+        //inserimento/modifica nuovo documento nella tabella
         if(isset($_POST['peso'])) {
             $id_utente = $_SESSION['id'];
             if(isset($_POST['ragioneSociale'])){
