@@ -81,6 +81,11 @@
                     echo "If you are not redirected, click <a href='index.php'>here</a>";
                 }
             }
+            else {
+                echo '<div class="alert alert-danger" role="alert">
+                Nessun Documento trovato
+                </div>';
+            }
         }
         else {
             header("refresh:5;url=index.php" );
@@ -383,6 +388,8 @@
                                         echo '<th scope="col">Distanza Oriz.</th>';
                                         echo '<th scope="col">Dislocazione Ang.</th>';
                                         echo '<th scope="col">Presa</th>';
+                                        echo '<th scope="col">Una mano</th>';
+                                        echo '<th scope="col">Due Persone</th>';
                                         echo '<th scope="col">Frequenza</th>';
                                         echo '<th scope="col">Durata</th>';
                                         echo '<th scope="col">Data Creazione</th>';
@@ -404,7 +411,24 @@
                                             echo '<td>' . $row['distanzaVerticale'] . '</td>';
                                             echo '<td>' . $row['distanzaOrizzontale'] . '</td>';
                                             echo '<td>' . $row['dislocazione'] . '</td>';
-                                            echo '<td>' . $row['presa'] . '</td>';
+                                            if($row['presa'] == 1) {
+                                                echo '<td>Buona</td>';
+                                            }
+                                            else {
+                                                echo '<td>Scarsa</td>';
+                                            }
+                                            if($row['unaMano'] == 1) {
+                                                echo '<td>Si</td>';
+                                            }
+                                            else {
+                                                echo '<td>No</td>';
+                                            }
+                                            if($row['duePersone'] == 1) {
+                                                echo '<td>Si</td>';
+                                            }
+                                            else {
+                                                echo '<td>No</td>';
+                                            }
                                             echo '<td>' . $row['frequenza'] . '</td>';
                                             echo '<td>' . $row['durata'] . '</td>';
                                             echo '<td>' . $row['dataCreazione'] . '</td>';
