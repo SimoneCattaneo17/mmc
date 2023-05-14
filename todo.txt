@@ -1,0 +1,4 @@
+gestione utenti, capire se solo gli admin possono crearne di nuovi
+pdf
+mettere nome utente e/o intestazione
+pagina di login aggiungere intestazione

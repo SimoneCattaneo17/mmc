@@ -44,11 +44,19 @@
                                                 echo '<li class="nav-item">';
                                                     echo '<a class="nav-link active" aria-current="page" href="new.php">Nuova Valutazione</a>';
                                                 echo '</li>';
+
+                                                echo '<li class="nav-item">';
+                                                    echo '<a class="nav-link active" aria-current="page" href="newUser.php">Crea nuovo utente</a>';
+                                                echo '</li>';
                                             echo '</ul>';
                                         }
 
                                         //right navbar items
                                         echo '<ul class="navbar-nav ms-auto">';
+                                            echo '<li class="nav-item">';
+                                                echo '<a class="nav-link active" aria-current="page">Benvenuto, ' . $_SESSION['username'] . '</a>';
+                                            echo '</li>';
+
                                             echo '<li class="nav-item">';
                                                 echo '<a class="nav-link" href="logout.php">Logout</a>';
                                             echo '<li>';
@@ -68,10 +76,10 @@
                 }
             }
             else {
-                echo '<div class="alert alert-danger" role="alert">
-                Nessun Documento trovato
+				echo '<div class="alert alert-danger" role="alert">
+                Nessun documento trovato
                 </div>';
-            }
+			}
         }
         else {
             header("refresh:5;url=index.php" );
@@ -80,27 +88,54 @@
             echo "If you are not redirected, click <a href='index.php'>here</a>";
         }
 
-        //inserimento/modifica nuovo documento nella tabella
+        //inserimento nuovo documento nella tabella
         if(isset($_POST['peso'])) {
             $id_utente = $_SESSION['id'];
             if(isset($_POST['ragioneSociale'])){
                 $ragione = $_POST['ragioneSociale'];
             }
-            $peso = $_POST['peso'];
-            $altezzaIniziale = $_POST['altezzaIniziale'];
-            $distanzaVerticale = $_POST['distanzaVerticale'];
-            $distanzaOrizzontale = $_POST['distanzaOrizzontale'];
-            $dislocazione = $_POST['dislocazioneAngolare'];
+            if(isset($_POST['peso'])){
+                $peso = $_POST['peso'];
+            }
+            if(isset($_POST['altezzaIniziale'])){
+                $altezzaIniziale = $_POST['altezzaIniziale'];
+            }
+            if(isset($_POST['distanzaVerticale'])){
+                $distanzaVerticale = $_POST['distanzaVerticale'];
+            }
+            if(isset($_POST['distanzaOrizzontale'])){
+                $distanzaOrizzontale = $_POST['distanzaOrizzontale'];
+            }
+            if(isset($_POST['dislocazioneAngolare'])){
+                $dislocazione = $_POST['dislocazioneAngolare'];
+            }
+            if(isset($_POST['presa'])){
+                $presa = $_POST['presa'];
+            }
             if($_POST['presa'] == "Buona") {
                 $presa = true;
             }
             else {
                 $presa = false;
             }
-            $frequenza = $_POST['frequenza'];
-            $durata = $_POST['durata'];
-            $unaMano = $_POST['unaMano'];
-            $duePersone = $_POST['duePersone'];
+            if(isset($_POST['frequenza'])){
+                $frequenza = $_POST['frequenza'];
+            }
+            if(isset($_POST['durata'])){
+                $durata = $_POST['durata'];
+            }
+            if(isset($_POST['unaMano'])){
+                $unaMano = $_POST['unaMano'];
+            }
+            else {
+                $unaMano = "off";
+            }
+            if(isset($_POST['duePersone'])){
+                $duePersone = $_POST['duePersone'];
+            }
+            else {
+                $duePersone = "off";
+            }
 
             switch(true) {
                 case $altezzaIniziale <= 25:
@@ -264,7 +299,7 @@
                             break;
                     }
                     break;
-                case $durata > 2 && $durata <= 8:
+                case $durata > 2:
                     switch(true){
                         case $frequenza <= 1:
                             $ff = 08.95;
@@ -308,7 +343,7 @@
                 $duePersone = 0;
             }
 
-            $cp = 23;
+            $cp = 20;
 
             $pesoLimite = $cp * $fa * $fb * $fc * $fd * $fe * $ff * $fg / $fh * $fi;
             
@@ -321,13 +356,20 @@
             }
             $result = connect($sql);
             if($result) {
-                echo '<div class="alert alert-success" role="alert">
-                DVR creato con successo!
+                if(isset($_GET['modifica'])){
+                    echo '<div class="alert alert-success" role="alert">
+                valutazione modificata con successo!
                 </div>';
+                }
+                else {
+                    echo '<div class="alert alert-success" role="alert">
+                valutazione inserita con successo!
+                </div>';
+                }
             }
             else {
                 echo '<div class="alert alert-danger" role="alert">
-                Errore durante la creazione del DVR!
+                Errore!
                 </div>';
             }
         }
@@ -339,12 +381,35 @@
             $result = connect($sql);
             if($result) {
                 echo '<div class="alert alert-success" role="alert">
-                DVR eliminato con successo!
+                Valutazione eliminata con successo!
                 </div>';
             }
             else {
                 echo '<div class="alert alert-danger" role="alert">
-                Errore durante l\'eliminazione del DVR!
+                Errore durante l\'eliminazione della valutazione!
+                </div>';
+            }
+        }
+
+        //creazione nuovo utente
+        if(isset($_POST['newUser']) && isset($_POST['newPswd']) && isset($_POST['newRights'])) {
+            if($_POST['newRights'] == "on") {
+                $_POST['newRights'] = 1;
+            }
+            else {
+                $_POST['newRights'] = 0;
+            }
+            $sql = "INSERT INTO mmc_utente (username, pswd, operatore) VALUES ('" . $_POST['newUser'] . "', '" . $_POST['newPswd'] . "', '" . $_POST['newRights'] . "')";
+            $result = connect($sql);
+
+            if($result) {
+                echo '<div class="alert alert-success" role="alert">
+                Utente creato con successo!
+                </div>';
+            }
+            else {
+                echo '<div class="alert alert-danger" role="alert">
+                Errore durante la creazione dell\'utente!
                 </div>';
             }
         }
@@ -374,7 +439,7 @@
                                         echo '<th scope="col">Distanza Oriz.</th>';
                                         echo '<th scope="col">Dislocazione Ang.</th>';
                                         echo '<th scope="col">Presa</th>';
-                                        echo '<th scope="col">Una mano</th>';
+                                         echo '<th scope="col">Una mano</th>';
                                         echo '<th scope="col">Due Persone</th>';
                                         echo '<th scope="col">Frequenza</th>';
                                         echo '<th scope="col">Durata</th>';
@@ -391,7 +456,12 @@
                                     while ($row = $result->fetch_assoc()) {
                                         echo '<tr>';
                                             echo '<td>' . $row['ragione'] . '</td>';
-                                            echo '<td>' . $row['peso'] / $row['pesoLimite'] . '</td>';
+                                            if($row['pesoLimite'] != 0){
+                                            	echo '<td>' . $row['peso'] / $row['pesoLimite'] . '</td>';
+                                            }
+                                            else{
+                                            	echo "<td> Riprogettare l'organizzazione </td>";
+                                            }
                                             echo '<td>' . $row['peso'] . '</td>';
                                             echo '<td>' . $row['altezzaIniziale'] . '</td>';
                                             echo '<td>' . $row['distanzaVerticale'] . '</td>';
@@ -434,7 +504,7 @@
             }
             else {
                 echo '<div class="alert alert-warning" role="alert">
-                Nessun DVR presente!
+                Nessuna valutazione presente!
                 </div>';
             }
         }

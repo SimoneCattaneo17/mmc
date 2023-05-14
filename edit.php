@@ -72,12 +72,12 @@ session_start();
 
                         <div class="form-outline mb-4">
                             <label class="form-label" for="typePasswordX-2">Sollevato con una mano?</label>
-                            <input type="checkbox" name="unaMano" id="durarata" />
+                            <input type="checkbox" name="unaMano" id="unaMano" />
                         </div>
 
                         <div class="form-outline mb-4">
                             <label class="form-label" for="typePasswordX-2">Sollevato con una mano?</label>
-                            <input type="checkbox" name="duePersone" id="persone" />
+                            <input type="checkbox" name="duePersone" id="duePersone" />
                         </div>
 
                         <div class="text-center">

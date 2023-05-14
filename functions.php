@@ -6,7 +6,7 @@ function connect($sql){
     $ip = '127.0.0.1';
     $username = 'root';
     $pwd = '';
-    $database = 'mmc';
+    $database = 'my_cattaneosimone';
     $connection = new mysqli($ip, $username, $pwd, $database);
 
     if($connection->connect_error) {
